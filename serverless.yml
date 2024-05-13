@@ -1,5 +1,5 @@
 org: jaganoerworks
-app: aws-node-project
+app: aws-node-http-api-project
 service: aws-node-http-api-project
 frameworkVersion: "3"
 
@@ -7,6 +7,13 @@ provider:
   name: aws
   runtime: nodejs18.x
   region: ap-northeast-1
+  httpApi:
+    authorizers:
+      auth0Authorizer:
+        identitySource: $request.header.Authorization
+        issuerUrl: https://dev-hzy2ijocvhfmctf6.jp.auth0.com/
+        audience:
+          - https://kd3iivjh3a.execute-api.ap-northeast-1.amazonaws.com/
 
 functions:
   api:
@@ -14,14 +21,6 @@ functions:
     events:
       - httpApi:
           path: /
-          method: post
-          cors:
-            origin: "https://www.example.com" # <-- Specify allowed origin
-            headers: # <-- Specify allowed headers
-              - Content-Type
-              - X-Amz-Date
-              - Authorization
-              - X-Api-Key
-              - X-Amz-Security-Token
-              - X-Amz-User-Agent
-            allowCredentials: true # <-- Specify whether credentials are allowed
+          method: get
+          authorizer:
+            name: auth0Authorizer
