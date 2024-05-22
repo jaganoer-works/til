@@ -13,14 +13,14 @@ provider:
         identitySource: $request.header.Authorization
         issuerUrl: https://dev-hzy2ijocvhfmctf6.jp.auth0.com/
         audience:
-          - https://kd3iivjh3a.execute-api.ap-northeast-1.amazonaws.com/
+          - https://ltckk51jeg.execute-api.ap-northeast-1.amazonaws.com
 
 functions:
   api:
     handler: index.handler
     events:
       - httpApi:
-          path: /
+          path: /hello
           method: get
           authorizer:
             name: auth0Authorizer
