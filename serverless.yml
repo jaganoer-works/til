@@ -13,7 +13,8 @@ provider:
         identitySource: $request.header.Authorization
         issuerUrl: https://dev-hzy2ijocvhfmctf6.jp.auth0.com/
         audience:
-          - https://ltckk51jeg.execute-api.ap-northeast-1.amazonaws.com
+          - https://luxy.com
+          - hogehoge
 
 functions:
   api:
