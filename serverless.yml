@@ -13,8 +13,8 @@ provider:
         identitySource: $request.header.Authorization
         issuerUrl: https://dev-hzy2ijocvhfmctf6.jp.auth0.com/
         audience:
-          - https://luxy.com
-          - hogehoge
+          - https://myapi.com
+          - https://mysecondapi.com
 
 functions:
   api:

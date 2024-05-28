@@ -1,92 +1,127 @@
-<!--
-title: 'AWS Simple HTTP Endpoint example in NodeJS'
-description: 'This template demonstrates how to make a simple HTTP API with Node.js running on AWS Lambda and API Gateway using the Serverless Framework.'
-layout: Doc
-framework: v3
-platform: AWS
-language: nodeJS
-authorLink: 'https://github.com/serverless'
-authorName: 'Serverless, inc.'
-authorAvatar: 'https://avatars1.githubusercontent.com/u/13742415?s=200&v=4'
--->
+## Auth0でのAPI作成とAPI Gatewayへの認可機能追加
 
-# Serverless Framework Node HTTP API on AWS
+### Auth0でAPIを作成する手順
+1. **Auth0ダッシュボードにログイン**
+2. **APIの作成**
+   - 左側のナビゲーションメニューから「APIs」を選択し、「+ Create API」ボタンをクリック。
+   - 必要な情報を入力し、APIを作成:
+     - **Name**: APIの名前（例: `MyAPI`）。
+     - **Identifier**: APIの識別子（例: `https://myapi.com`）。
+     - **Signing Algorithm**: `RS256`を選択。
+   - 「Create」ボタンをクリックしてAPIを作成。
+3. **API Permissionsの設定**
+   - 作成したAPIの詳細ページに移動し、「Permissions」タブで必要なパーミッションを追加:
+     - **Permission Name**: パーミッションの名前（例: `read:messages`）。
+     - **Description**: パーミッションの説明（例: `Read access to messages`）。
+     - **Add** ボタンをクリックしてパーミッションを追加。
+     - **例**:
+       - `read:messages`: メッセージの読み取り権限
+       - `write:messages`: メッセージの書き込み権限
+       - `delete:messages`: メッセージの削除権限
+4. **複数APIの作成**
+   - 同様の手順で、必要な数だけAPIを作成（例: `MySecondAPI`、識別子: `https://mysecondapi.com`）。
+5. **クライアントの作成**
+   - 左メニューの「Applications」から「+ Create Application」をクリック。
+   - アプリケーションの設定を行い作成:
+     - **Name**: アプリケーションの名前（例: `MyClient`）。
+     - **Type**: `Machine to Machine Applications`を選択。
+6. **APIへのアクセスを許可**
+   - 作成したアプリケーションの詳細ページの「APIs」タブで、先ほど作成した各APIを選択。
+   - 必要なスコープを選択し、「Add Permissions」ボタンをクリック。
+     - **例**:
+       - `read:messages`
+       - `write:messages`
+7. **クライアントIDとクライアントシークレットの確認**
+   - アプリケーションの「Settings」タブでクライアントIDとクライアントシークレットを確認。
 
-This template demonstrates how to make a simple HTTP API with Node.js running on AWS Lambda and API Gateway using the Serverless Framework.
-
-This template does not include any kind of persistence (database). For more advanced examples, check out the [serverless/examples repository](https://github.com/serverless/examples/) which includes Typescript, Mongo, DynamoDB and other examples.
-
-## Usage
-
-### Deployment
-
-```
-$ serverless deploy
-```
-
-After deploying, you should see output similar to:
-
-```bash
-Deploying aws-node-http-api-project to stage dev (us-east-1)
-
-✔ Service deployed to stack aws-node-http-api-project-dev (152s)
-
-endpoint: GET - https://xxxxxxxxxx.execute-api.us-east-1.amazonaws.com/
-functions:
-  hello: aws-node-http-api-project-dev-hello (1.9 kB)
-```
-
-_Note_: In current form, after deployment, your API is public and can be invoked by anyone. For production deployments, you might want to configure an authorizer. For details on how to do that, refer to [http event docs](https://www.serverless.com/framework/docs/providers/aws/events/apigateway/).
-
-### Invocation
-
-After successful deployment, you can call the created application via HTTP:
+### アクセストークンの取得方法
+以下のコマンドを使用してアクセストークンを取得。各APIごとにアクセストークンを取得する。
 
 ```bash
-curl https://xxxxxxx.execute-api.us-east-1.amazonaws.com/
+curl --request POST \
+  --url 'https://<YOUR_DOMAIN>/oauth/token' \
+  --header 'content-type: application/x-www-form-urlencoded' \
+  --data grant_type=client_credentials \
+  --data client_id=<YOUR_CLIENT_ID> \
+  --data client_secret=<YOUR_CLIENT_SECRET> \
+  --data audience=https://myapi.com
 ```
 
-Which should result in response similar to the following (removed `input` content for brevity):
+```bash
+curl --request POST \
+  --url 'https://<YOUR_DOMAIN>/oauth/token' \
+  --header 'content-type: application/x-www-form-urlencoded' \
+  --data grant_type=client_credentials \
+  --data client_id=<YOUR_CLIENT_ID> \
+  --data client_secret=<YOUR_CLIENT_SECRET> \
+  --data audience=https://mysecondapi.com
+```
+
+- `<YOUR_DOMAIN>`: Auth0のドメイン（例: `dev-hzy2ijocvhfmctf6.jp.auth0.com`）
+- `<YOUR_CLIENT_ID>`: 作成したクライアントのID
+- `<YOUR_CLIENT_SECRET>`: 作成したクライアントのシークレット
+- `audience`: 作成した各APIの識別子（例: `https://myapi.com`, `https://mysecondapi.com`）
+
+### トークンを使用したAPIリクエスト
+取得したアクセストークンを使用してAPIにアクセス。
+
+```bash
+curl -X GET -H 'Authorization: Bearer <ACCESS_TOKEN>' 'https://<YOUR_API_ENDPOINT>'
+```
+
+- `<ACCESS_TOKEN>`: 取得したアクセストークン
+- `<YOUR_API_ENDPOINT>`: APIエンドポイント（例: `https://ltckk51jeg.execute-api.ap-northeast-1.amazonaws.com/hello`）
+
 
 ```json
 {
-  "message": "Go Serverless v2.0! Your function executed successfully!",
-  "input": {
-    ...
-  }
-}
+  "message": "Go Serverless v3.0! Your function executed successfully!"
+}%
 ```
+              
 
-### Local development
-
-You can invoke your function locally by using the following command:
+### トークンなしでAPIリクエストを送った場合
+トークンなしでAPIリクエストを送ると、認可エラーが発生する。
 
 ```bash
-serverless invoke local --function hello
+curl -X GET 'https://<YOUR_API_ENDPOINT>'
 ```
 
-Which should result in response similar to the following:
+- このリクエストは`401 Unauthorized`エラーを返す。
 
-```
+```json
 {
-  "statusCode": 200,
-  "body": "{\n  \"message\": \"Go Serverless v3.0! Your function executed successfully!\",\n  \"input\": \"\"\n}"
+  "message": "Unauthorized"
 }
 ```
 
+### Serverless Frameworkの設定
+```yaml
+org: jaganoerworks
+app: aws-node-http-api-project
+service: aws-node-http-api-project
+frameworkVersion: "3"
 
-Alternatively, it is also possible to emulate API Gateway and Lambda locally by using `serverless-offline` plugin. In order to do that, execute the following command:
+provider:
+  name: aws
+  runtime: nodejs18.x
+  region: ap-northeast-1
+  httpApi:
+    authorizers:
+      auth0Authorizer:
+        identitySource: $request.header.Authorization
+        issuerUrl: https://dev-hzy2ijocvhfmctf6.jp.auth0.com/
+        audience:
+          - https://myapi.com
+          - https://mysecondapi.com
 
-```bash
-serverless plugin install -n serverless-offline
+functions:
+  api:
+    handler: index.handler
+    events:
+      - httpApi:
+          path: /hello
+          method: get
+          authorizer:
+            name: auth0Authorizer
 ```
-
-It will add the `serverless-offline` plugin to `devDependencies` in `package.json` file as well as will add it to `plugins` in `serverless.yml`.
-
-After installation, you can start local emulation with:
-
-```
-serverless offline
-```
-
-To learn more about the capabilities of `serverless-offline`, please refer to its [GitHub repository](https://github.com/dherault/serverless-offline).
