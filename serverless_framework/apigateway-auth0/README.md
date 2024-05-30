@@ -128,5 +128,7 @@ functions:
 ```
 
 ### .envの設定
+```
 AUTH0_DOMAIN=https://<TENANT NAME>.jp.auth0.com/
 AUTH0_AUDIENCE=<API AUDIENCE>
+```
