@@ -19,11 +19,20 @@ provider:
           - ${env:AUTH0_AUDIENCE}
 
 functions:
-  api:
-    handler: index.handler
+  apiHello:
+    handler: index.helloHandler
     events:
       - httpApi:
           path: /hello
+          method: get
+          authorizer:
+            name: auth0Authorizer
+
+  apiGoodbye:
+    handler: index.goodbyeHandler
+    events:
+      - httpApi:
+          path: /goodbye
           method: get
           authorizer:
             name: auth0Authorizer

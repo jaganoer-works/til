@@ -1,15 +1,17 @@
-module.exports.handler = async (event) => {
+module.exports.helloHandler = async (event) => {
   return {
     statusCode: 200,
-    body: JSON.stringify(
-      {
-        message: "Go Serverless v3.0! Your function executed successfully!",
-        headers: {
-          "Access-Control-Allow-Origin": "*",
-        },
-      },
-      null,
-      2
-    ),
+    body: JSON.stringify({
+      message: "Hello, world!",
+    }),
+  };
+};
+
+module.exports.goodbyeHandler = async (event) => {
+  return {
+    statusCode: 200,
+    body: JSON.stringify({
+      message: "Goodbye, world!",
+    }),
   };
 };

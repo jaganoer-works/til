@@ -14,7 +14,7 @@ export default function Home() {
   const domain = process.env.NEXT_PUBLIC_AUTH0_DOMAIN;
   const apiUri = process.env.NEXT_PUBLIC_API_URL;
 
-  const callAPI = async () => {
+  const callAPIHello = async () => {
     const accessToken = await getAccessTokenSilently({
       authorizationParams: {
         audience: `https://${domain}/api/v2/`,
@@ -31,6 +31,24 @@ export default function Home() {
     console.log(data);
   };
 
+  const callAPIGoodbye = async () => {
+    const accessToken = await getAccessTokenSilently({
+      authorizationParams: {
+        audience: `https://${domain}/api/v2/`,
+        scope: "read:current_user",
+      },
+    });
+
+    const response = await fetch(`${apiUri}/goodbye`, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
+    const data = await response.json();
+    console.log(data);
+  };
+
+
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-24">
       {isAuthenticated ? (
@@ -40,7 +58,8 @@ export default function Home() {
           >
             Log Out
           </button>
-          <button onClick={callAPI}>Call API</button>
+          <button onClick={callAPIHello}>callAPIHello</button>
+          <button onClick={callAPIGoodbye}>callAPIGoodbye</button>
         </>
       ) : (
         <>
