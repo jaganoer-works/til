@@ -102,6 +102,8 @@ app: aws-node-http-api-project
 service: aws-node-http-api-project
 frameworkVersion: "3"
 
+useDotenv: true
+
 provider:
   name: aws
   runtime: nodejs18.x
@@ -110,10 +112,9 @@ provider:
     authorizers:
       auth0Authorizer:
         identitySource: $request.header.Authorization
-        issuerUrl: https://dev-hzy2ijocvhfmctf6.jp.auth0.com/
+        issuerUrl:  ${env:AUTH0_DOMAIN}
         audience:
-          - https://myapi.com
-          - https://mysecondapi.com
+          - ${env:AUTH0_AUDIENCE}
 
 functions:
   api:
@@ -125,3 +126,7 @@ functions:
           authorizer:
             name: auth0Authorizer
 ```
+
+### .envの設定
+AUTH0_DOMAIN=https://<TENANT NAME>.jp.auth0.com/
+AUTH0_AUDIENCE=<API AUDIENCE>
