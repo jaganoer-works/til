@@ -13,7 +13,7 @@ provider:
     authorizers:
       auth0Authorizer:
         identitySource: $request.header.Authorization
-        issuerUrl:  ${env:AUTH0_DOMAIN}
+        issuerUrl: ${env:AUTH0_DOMAIN}
         audience:
           - ${env:AUTH0_AUDIENCE}
 
