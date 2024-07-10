@@ -12,7 +12,7 @@ body:
     attributes:
       label: 機能名
       description: 開発する機能や改修の名前を簡潔に記入してください。
-      placeholder: 例: ユーザー認証システムの実装
+      placeholder: 例:ユーザー認証システムの実装
     validations:
       required: true
 
