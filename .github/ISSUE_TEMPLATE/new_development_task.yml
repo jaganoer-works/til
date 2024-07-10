@@ -1,0 +1,113 @@
+name: 新規開発タスク
+description: 新機能開発や大規模改修のためのテンプレート
+labels: [development, new-feature]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        新規開発タスクの作成ありがとうございます。このフォームに必要事項を記入して、タスクの詳細を明確にしてください。
+
+  - type: input
+    id: feature-name
+    attributes:
+      label: 機能名
+      description: 開発する機能や改修の名前を簡潔に記入してください。
+      placeholder: 例: ユーザー認証システムの実装
+    validations:
+      required: true
+
+  - type: textarea
+    id: feature-description
+    attributes:
+      label: 機能の詳細説明
+      description: 開発する機能や改修の詳細を説明してください。
+      placeholder: この機能は何を行い、どのように動作するべきですか？
+    validations:
+      required: true
+
+  - type: textarea
+    id: technical-requirements
+    attributes:
+      label: 技術要件
+      description: 実装に必要な技術的な要件や制約を列挙してください。
+      placeholder: |
+        - 使用言語: Python 3.8+
+        - フレームワーク: Django 3.2
+        - データベース: PostgreSQL
+    validations:
+      required: true
+
+  - type: textarea
+    id: acceptance-criteria
+    attributes:
+      label: 受け入れ基準
+      description: この機能が完了したと見なすための基準を列挙してください。
+      placeholder: |
+        1. ユーザーがメールアドレスとパスワードで登録できる
+        2. 登録時にメール認証が行われる
+        3. ログイン・ログアウトが正常に動作する
+    validations:
+      required: true
+
+  - type: textarea
+    id: ui-ux-requirements
+    attributes:
+      label: UI/UX要件
+      description: ユーザーインターフェースやユーザー体験に関する要件があれば記述してください。
+      placeholder: モバイルフレンドリーなレスポンシブデザインが必要です。
+
+  - type: textarea
+    id: dependencies
+    attributes:
+      label: 依存関係
+      description: この機能が依存する他の機能や外部サービスがあれば列挙してください。
+      placeholder: |
+        - ユーザープロフィール機能 (#123)
+        - メール送信サービス
+
+  - type: textarea
+    id: testing-requirements
+    attributes:
+      label: テスト要件
+      description: この機能に必要なテストの種類や範囲を説明してください。
+      placeholder: |
+        - ユニットテスト: 各関数の動作確認
+        - 統合テスト: データベースとの連携確認
+        - E2Eテスト: ユーザー登録からログインまでの一連の流れ
+
+  - type: dropdown
+    id: priority
+    attributes:
+      label: 優先度
+      options:
+        - 高（即時対応）
+        - 中（計画的に対応）
+        - 低（余裕があれば対応）
+    validations:
+      required: true
+
+  - type: input
+    id: estimated-time
+    attributes:
+      label: 予想所要時間
+      description: この機能の開発にかかる予想時間を記入してください。
+      placeholder: 例:40時間
+
+  - type: textarea
+    id: additional-notes
+    attributes:
+      label: 追加情報
+      description: その他、開発に関連する情報や注意点があれば記入してください。
+
+  - type: checkboxes
+    id: confirmation
+    attributes:
+      label: 確認事項
+      description: 以下の項目を確認してチェックしてください。
+      options:
+        - label: この機能がプロジェクトの目標に合致していることを確認しました
+          required: true
+        - label: 既存の機能と重複していないことを確認しました
+          required: true
+        - label: 必要なリソース（人員、時間、予算）が確保できる見込みがあります
+          required: true
