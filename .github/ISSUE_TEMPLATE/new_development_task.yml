@@ -71,6 +71,7 @@ body:
       label: テスト要件
       description: この機能に必要なテストの種類や範囲を説明してください。
       placeholder: |
+        - 動作確認: スクリーンショット添付
         - ユニットテスト: 各関数の動作確認
         - 統合テスト: データベースとの連携確認
         - E2Eテスト: ユーザー登録からログインまでの一連の流れ
@@ -86,28 +87,8 @@ body:
     validations:
       required: true
 
-  - type: input
-    id: estimated-time
-    attributes:
-      label: 予想所要時間
-      description: この機能の開発にかかる予想時間を記入してください。
-      placeholder: 例:40時間
-
   - type: textarea
     id: additional-notes
     attributes:
       label: 追加情報
       description: その他、開発に関連する情報や注意点があれば記入してください。
-
-  - type: checkboxes
-    id: confirmation
-    attributes:
-      label: 確認事項
-      description: 以下の項目を確認してチェックしてください。
-      options:
-        - label: この機能がプロジェクトの目標に合致していることを確認しました
-          required: true
-        - label: 既存の機能と重複していないことを確認しました
-          required: true
-        - label: 必要なリソース（人員、時間、予算）が確保できる見込みがあります
-          required: true
